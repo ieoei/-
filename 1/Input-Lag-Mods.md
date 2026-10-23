@@ -13,13 +13,14 @@ Games optimized so far:
 - TK7
 - TTT2
 - USF4
+- SFxTK
 - 2XKO
 - FF10HD
 
 The "PATCH" sections list the Array of Byte hex patterns you can search & replace to mod the games yourself using an hex editor of your choice.
-
+***
 ## Soulcalibur 5
-**REDUCTION:**  
+**NOTES:**  
 2 frames, neutralize the forced network lag simulator option in training mode.  
 
 **LINKS:**  
@@ -31,9 +32,9 @@ https://github.com/xenia-canary/game-patches/pull/477
 7C E9 00 2E 81 2B 03 DC -> 38 E0 00 00 81 2B 03 DC (PS3)
 7D 26 58 2E 7D 06 28 2E -> 7D 26 58 2E 39 00 00 00 (X360)
 ```
-
+***
 ## Soulcalibur 6
-**REDUCTION:**  
+**NOTES:**  
 1 frame, neutralize the forced network lag simulator option in training mode.  
 
 **LINKS:**  
@@ -43,9 +44,9 @@ https://8wayrun.com/threads/mod-to-reduce-offline-input-lag-on-pc-by-1-frame.209
 ```
 74 06 2B 9F 90 03 00 00 ->  74 06 90 90 90 90 90 90 (Windows SoulcaliburVI.exe)
 ```
-
+***
 ## Tekken 7
-**REDUCTION:**  
+**NOTES:**  
 1 frame, neutralize the forced network lag simulator option in training mode.  
 
 **LINKS:**  
@@ -56,9 +57,9 @@ https://web.archive.org/web/20191014113334/https://forums.shoryuken.com/t/mod-to
 ```
 0C 8B 86 F4 04 00 00 -> 0C 90 90 90 90 90 90 (Windows TekkenGame-Win64-Shipping.exe)
 ```
-
+***
 ## Tekken Tag Tournament 2
-**REDUCTION:**  
+**NOTES:**  
 2 frames, neutralize the forced network lag simulator option in training mode.  
 
 **LINKS:**  
@@ -74,10 +75,9 @@ https://ieoei.github.io/-/1/RPCS3-basic-Game-Patch-creation-tutorial
 90 83 00 00 3D 00 82 00 -> 60 00 00 00 3D 00 82 00 (X360)
 90 0A 00 10 80 EB 00 00 -> 90 0A 00 10 38 E0 00 00 (WiiU)
 ```
-
-
+***
 ## Ultra Street Fighter 4
-**REDUCTION:**  
+**NOTES:**  
 2 frames on controller, 3 frames on keyboard.  
 For the gameplay lag mod, it was an off-by-1 bug. Its piece of logic points to `esi+2C` which is a 4-byte frame counter that raises by +1 each frame during a match. Its "neighboring" address at `esi+28` is the same frame counter except smaller by 1F... if we swap `2C` to `28`, the lag decreases by 1F.  
 For the keyboard lag mod, it was some kind of bad queue running "one step late" that we reordered for better sync.  
@@ -94,9 +94,27 @@ https://github.com/Confetti3/SF4-Ember-Netplay/issues/77
 
 %USERPROFILE%\Documents\CAPCOM\SUPERSTREETFIGHTERIV\config.ini... RenderingThread=ON -> RenderingThread=OFF
 ```
+***
+## Street Fighter X Tekken
+**NOTES:**  
+2 frames on controller, 3 frames on keyboard.  
+Same story as USF4 due to being very similar games. But this time the .ini edit was reported to behave badly on high refresh monitors, and the mod itself is for offline use only as it breaks the online.  
+Keyboard fix split in 2 to avoid ASLR.  
 
+**LINKS:**  
+https://www.mediafire.com/file/gmmhoxat3etn6a0/SFxTKInputLagMod.zip/file  
+
+**PATCH:**  
+```
+8B 4B 5C 33 D2 89 -> 8B 4B 58 33 D2 89 (Windows SFTK.exe, 1F gameplay lag reduction)
+24 00 00 00 00 8B 4D 08 8B 51 08 8B 82 00 08 00 00 8B -> 24 00 00 00 00 8B 4D 08 8B 51 08 8B 82 00 08 00 00 8D (Windows SFTK.exe, 1F keyboard-only extra lag reduction part 1)
+98 8B 11 8B 42 2C 57 FF D0 85 C0 -> 98 0F B6 84 39 1C 7C DF FF A8 80 (Windows SFTK.exe, 1F keyboard-only extra lag reduction part 2)
+
+%USERPROFILE%\Documents\CAPCOM\SFTK\config.ini... RenderingThread=ON -> RenderingThread=OFF
+```
+***
 ## 2XKO
-**REDUCTION:**  
+**NOTES:**  
 3 frames, neutralizing the internal "GetInputDelay" function.  
 My theory for their design decision is that despite using rollback netcode made by the creators of GGPO and the official reasons listed in the blog post, the real reason is that the higher-ups decided that the game couldn't be peer-to-peer for anti-cheat and DRM reasons, forcing connections to go through an extra server relay hop, thus almost inevitably increasing the lag, thus resorting to the cheap shortcut of sacrificing offline to mask the online rollbacks.  
 
@@ -108,9 +126,9 @@ https://2xko.riotgames.com/en-us/news/dev/how-2xko-handles-online-play/
 ```
 8B E8 39 44 -> 31 ED 39 6C (Windows Lion-Win64-Shipping.exe, DRM-less version required)
 ```
-
+***
 ## Final Fantasy 10 HD Remaster
-**REDUCTION:**  
+**NOTES:**  
 The battle menus are slow, 350 ms + 400 ms input delays & 200 ms animation delays on every page switch. FF10-2 is unaffected.  
 
 **LINKS:**  
